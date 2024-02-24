@@ -5,7 +5,7 @@ namespace Tests\Unit\core\Gateway;
 use Core\Collections\CartItemCollection;
 use Core\Entities\Cart;
 use Core\Entities\CartItem;
-use Core\Entities\CreditCart;
+use Core\Entities\CreditCard;
 use Core\Gateway\PaymentMethods\CreditCardPayment;
 use Core\Gateway\PaymentMethods\CreditCashPayment;
 use Core\Gateway\PaymentMethods\PixPayment;
@@ -47,7 +47,7 @@ class PaymentProcessTest extends TestCase
 
         $item2 = $this->createMock(CartItem::class);
         $item2->method('getPrice')->willReturn('20000');
-        $card = $this->createMock(CreditCart::class);
+        $card = $this->createMock(CreditCard::class);
 
         $collection = new CartItemCollection();
         $collection->add($item1);
@@ -74,7 +74,7 @@ class PaymentProcessTest extends TestCase
 
         $item2 = $this->createMock(CartItem::class);
         $item2->method('getPrice')->willReturn('20000');
-        $card = $this->createMock(CreditCart::class);
+        $card = $this->createMock(CreditCard::class);
 
         $collection = new CartItemCollection();
         $collection->add($item1);
@@ -87,7 +87,7 @@ class PaymentProcessTest extends TestCase
         $paymentProcess = new PaymentProcess($paymentMethod);
 
         //assert
-        $this->assertEquals(5523110, $paymentProcess->process());
+        $this->assertEquals(55231, $paymentProcess->process());
         $this->assertEquals(50000, $paymentMethod->getOrderValue());
     }
 }

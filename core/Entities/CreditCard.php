@@ -2,7 +2,7 @@
 
 namespace Core\Entities;
 
-class CreditCart
+class CreditCard
 {
     public function __construct(
         private readonly string $owner_name,

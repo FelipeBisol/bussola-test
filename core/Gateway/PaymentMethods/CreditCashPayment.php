@@ -3,16 +3,16 @@
 namespace Core\Gateway\PaymentMethods;
 
 use Core\Entities\Cart;
-use Core\Entities\CreditCart;
+use Core\Entities\CreditCard;
 use Core\Gateway\Interfaces\PaymentMethod;
 
 class CreditCashPayment implements PaymentMethod
 {
     private Cart $cart;
     private int $discount_value;
-    private CreditCart $credit_cart;
+    private CreditCard $credit_cart;
 
-    public function __construct(Cart $cart, CreditCart $credit_card)
+    public function __construct(Cart $cart, CreditCard $credit_card)
     {
         $this->cart = $cart;
         $this->credit_cart = $credit_card;

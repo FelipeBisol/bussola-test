@@ -3,16 +3,16 @@
 namespace Core\Gateway\PaymentMethods;
 
 use Core\Entities\Cart;
-use Core\Entities\CreditCart;
+use Core\Entities\CreditCard;
 use Core\Gateway\Interfaces\PaymentMethod;
 
 class CreditCardPayment implements PaymentMethod
 {
     private Cart $cart;
     private int $installments;
-    private CreditCart $credit_cart;
+    private CreditCard $credit_cart;
 
-    public function __construct(Cart $cart, CreditCart $credit_card, int $installments)
+    public function __construct(Cart $cart, CreditCard $credit_card, int $installments)
     {
         $this->cart = $cart;
         $this->credit_cart = $credit_card;
@@ -21,7 +21,7 @@ class CreditCardPayment implements PaymentMethod
 
     public function processPayment(): int
     {
-        return ($this->getOrderValue() * pow((1 + 0.01), $this->installments)) * 100;
+        return $this->getOrderValue() * ((1 + 0.01) ** $this->installments);
     }
 
     public function getOrderValue(): int
