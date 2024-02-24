@@ -1,8 +1,8 @@
 <?php
 
-namespace Core\Entities;
+namespace Core\Modules\Payment\Entities;
 
-use Core\Collections\CartItemCollection;
+use Core\Modules\Payment\Collections\CartItemCollection;
 
 class Cart
 {

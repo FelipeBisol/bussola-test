@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\Entities;
+namespace Core\Modules\Payment\Entities;
 
 class CartItem
 {

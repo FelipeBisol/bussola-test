@@ -2,9 +2,9 @@
 
 namespace Tests\Unit\core\Entities;
 
-use Core\Collections\CartItemCollection;
-use Core\Entities\Cart;
-use Core\Entities\CartItem;
+use Core\Modules\Payment\Collections\CartItemCollection;
+use Core\Modules\Payment\Entities\Cart;
+use Core\Modules\Payment\Entities\CartItem;
 use Tests\TestCase;
 
 class CartTest extends TestCase

@@ -1,8 +1,8 @@
 <?php
 
-namespace Core\Collections;
+namespace Core\Modules\Payment\Collections;
 
-use Core\Entities\CartItem;
+use Core\Modules\Payment\Entities\CartItem;
 use Traversable;
 
 class CartItemCollection implements \IteratorAggregate

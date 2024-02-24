@@ -1,11 +1,11 @@
 <?php
 
-namespace Core\Gateway\PaymentMethods;
+namespace Core\Modules\Payment\Gateway\PaymentMethods;
 
-use Core\Entities\Cart;
-use Core\Entities\CreditCard;
-use Core\Entities\Installment;
-use Core\Gateway\Interfaces\PaymentMethod;
+use Core\Modules\Payment\Entities\Cart;
+use Core\Modules\Payment\Entities\CreditCard;
+use Core\Modules\Payment\Entities\Installment;
+use Core\Modules\Payment\Gateway\Interfaces\PaymentMethod;
 
 class CreditCardPayment implements PaymentMethod
 {

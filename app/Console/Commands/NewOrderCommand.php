@@ -2,18 +2,21 @@
 
 namespace App\Console\Commands;
 
-use Core\Collections\CartItemCollection;
-use Core\Entities\Cart;
-use Core\Entities\CartItem;
-use Core\Entities\CreditCard;
-use Core\Entities\Installment;
-use Core\Enum\PaymentMethod;
-use Core\Enum\Products;
-use Core\Exceptions\InstallmentException;
-use Core\Gateway\PaymentMethods\CreditCardPayment;
-use Core\Gateway\PaymentMethods\CreditCashPayment;
-use Core\Gateway\PaymentMethods\PixPayment;
-use Core\Gateway\PaymentProcess;
+use Core\Modules\Payment\Collections\CartItemCollection;
+use Core\Modules\Payment\Entities\Cart;
+use Core\Modules\Payment\Entities\CartItem;
+use Core\Modules\Payment\Entities\CreditCard;
+use Core\Modules\Payment\Entities\Installment;
+use Core\Modules\Payment\Enum\PaymentMethod;
+use Core\Modules\Payment\Enum\Products;
+use Core\Modules\Payment\Exceptions\InstallmentException;
+use Core\Modules\Payment\Gateway\PaymentMethods\CreditCardPayment;
+use Core\Modules\Payment\Gateway\PaymentMethods\CreditCashPayment;
+use Core\Modules\Payment\Gateway\PaymentMethods\PixPayment;
+use Core\Modules\Payment\Gateway\PaymentProcess;
+use Core\Modules\Payment\UseCases\ProcessCreditCardPayment;
+use Core\Modules\Payment\UseCases\ProcessCreditCashPayment;
+use Core\Modules\Payment\UseCases\ProcessPixPayment;
 use Illuminate\Console\Command;
 
 class NewOrderCommand extends Command
@@ -82,13 +85,14 @@ class NewOrderCommand extends Command
             $installments = new Installment($this->ask('Em quantas prestações pretende pagar?'));
         }
 
-        $method = match ($payment_method){
-            PaymentMethod::Pix->getName() => new PixPayment($cart),
-            PaymentMethod::CreditCash->getName() => new CreditCashPayment($cart, $card),
-            PaymentMethod::CreditCard->getName() => new CreditCardPayment($cart, $card, $installments),
+        $paymentProcessor = match ($payment_method){
+            PaymentMethod::Pix->getName() => new ProcessPixPayment(new PixPayment($cart)),
+            PaymentMethod::CreditCash->getName() => new ProcessCreditCashPayment(new CreditCashPayment($cart, $card)),
+            PaymentMethod::CreditCard->getName() => new ProcessCreditCardPayment(new CreditCardPayment($cart, $card, $installments)),
         };
 
-        $paymentProcess = new PaymentProcess($method);
-        $this->alert('O valor total da compra é: R$' . number_format($paymentProcess->process() / 100, 2, ',', '.'));
+        $paymentProcessor->process();
+
+        $this->alert($paymentProcessor->getResponse());
     }
 }

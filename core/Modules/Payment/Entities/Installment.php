@@ -1,8 +1,8 @@
 <?php
 
-namespace Core\Entities;
+namespace Core\Modules\Payment\Entities;
 
-use Core\Exceptions\InstallmentException;
+use Core\Modules\Payment\Exceptions\InstallmentException;
 
 class Installment
 {

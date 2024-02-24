@@ -1,8 +1,6 @@
 <?php
 
-namespace Core\Gateway\Interfaces;
-
-use Core\Entities\Cart;
+namespace Core\Modules\Payment\Gateway\Interfaces;
 
 interface PaymentMethod
 {

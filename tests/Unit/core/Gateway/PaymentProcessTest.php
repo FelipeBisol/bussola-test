@@ -2,16 +2,19 @@
 
 namespace Tests\Unit\core\Gateway;
 
-use Core\Collections\CartItemCollection;
-use Core\Entities\Cart;
-use Core\Entities\CartItem;
-use Core\Entities\CreditCard;
-use Core\Entities\Installment;
-use Core\Exceptions\InstallmentException;
-use Core\Gateway\PaymentMethods\CreditCardPayment;
-use Core\Gateway\PaymentMethods\CreditCashPayment;
-use Core\Gateway\PaymentMethods\PixPayment;
-use Core\Gateway\PaymentProcess;
+use Core\Modules\Payment\Collections\CartItemCollection;
+use Core\Modules\Payment\Entities\Cart;
+use Core\Modules\Payment\Entities\CartItem;
+use Core\Modules\Payment\Entities\CreditCard;
+use Core\Modules\Payment\Entities\Installment;
+use Core\Modules\Payment\Exceptions\InstallmentException;
+use Core\Modules\Payment\Gateway\PaymentMethods\CreditCardPayment;
+use Core\Modules\Payment\Gateway\PaymentMethods\CreditCashPayment;
+use Core\Modules\Payment\Gateway\PaymentMethods\PixPayment;
+use Core\Modules\Payment\Gateway\PaymentProcess;
+use Core\Modules\Payment\UseCases\ProcessCreditCardPayment;
+use Core\Modules\Payment\UseCases\ProcessCreditCashPayment;
+use Core\Modules\Payment\UseCases\ProcessPixPayment;
 use PHPUnit\Framework\TestCase;
 
 class PaymentProcessTest extends TestCase
@@ -33,12 +36,12 @@ class PaymentProcessTest extends TestCase
         $paymentMethod = new PixPayment($cart);
 
         //act
-        $paymentProcess = new PaymentProcess($paymentMethod);
-
+        $paymentProcess = new ProcessPixPayment($paymentMethod);
 
         //assert
         $this->assertEquals(31500, $paymentProcess->process());
         $this->assertEquals(35000, $paymentMethod->getOrderValue());
+        $this->assertEquals('A sua compra recebeu um desconto de: R$ 35,00. Ficando no valor total de: R$ 315,00', $paymentProcess->getResponse());
     }
 
     public function test_credit_cash()
@@ -59,12 +62,13 @@ class PaymentProcessTest extends TestCase
         $paymentMethod = new CreditCashPayment($cart, $card);
 
         //act
-        $paymentProcess = new PaymentProcess($paymentMethod);
+        $paymentProcess = new ProcessCreditCashPayment($paymentMethod);
 
 
         //assert
         $this->assertEquals(45000, $paymentProcess->process());
         $this->assertEquals(50000, $paymentMethod->getOrderValue());
+        $this->assertEquals('A sua compra recebeu um desconto de: R$ 50,00. Ficando no valor total de: R$ 450,00', $paymentProcess->getResponse());
     }
 
     public function test_credit_card()
@@ -87,7 +91,7 @@ class PaymentProcessTest extends TestCase
         $paymentMethod = new CreditCardPayment($cart, $card, $installments);
 
         //act
-        $paymentProcess = new PaymentProcess($paymentMethod);
+        $paymentProcess = new ProcessCreditCardPayment($paymentMethod);
 
         //assert
         $this->assertEquals(55231, $paymentProcess->process());
@@ -114,9 +118,5 @@ class PaymentProcessTest extends TestCase
 
         $installments = new Installment(14);
         $paymentMethod = new CreditCardPayment($cart, $card, $installments);
-
-        //act
-        $paymentProcess = new PaymentProcess($paymentMethod);
-        $paymentProcess->process();
     }
 }

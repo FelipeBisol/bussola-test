@@ -1,21 +1,18 @@
 <?php
 
-namespace Core\Gateway\PaymentMethods;
+namespace Core\Modules\Payment\Gateway\PaymentMethods;
 
-use Core\Entities\Cart;
-use Core\Entities\CreditCard;
-use Core\Gateway\Interfaces\PaymentMethod;
+use Core\Modules\Payment\Entities\Cart;
+use Core\Modules\Payment\Gateway\Interfaces\PaymentMethod;
 
-class CreditCashPayment implements PaymentMethod
+class PixPayment implements PaymentMethod
 {
     private Cart $cart;
-    private int $discount_value;
-    private CreditCard $credit_cart;
+    protected int $discount_value;
 
-    public function __construct(Cart $cart, CreditCard $credit_card)
+    public function __construct(Cart $cart)
     {
         $this->cart = $cart;
-        $this->credit_cart = $credit_card;
         $this->discount_value = $this->getOrderValue() * 0.10;
     }
 
