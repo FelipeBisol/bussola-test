@@ -6,8 +6,10 @@ use Core\Collections\CartItemCollection;
 use Core\Entities\Cart;
 use Core\Entities\CartItem;
 use Core\Entities\CreditCard;
+use Core\Entities\Installment;
 use Core\Enum\PaymentMethod;
 use Core\Enum\Products;
+use Core\Exceptions\InstallmentException;
 use Core\Gateway\PaymentMethods\CreditCardPayment;
 use Core\Gateway\PaymentMethods\CreditCashPayment;
 use Core\Gateway\PaymentMethods\PixPayment;
@@ -20,6 +22,9 @@ class NewOrderCommand extends Command
 
     protected $description = 'Command description';
 
+    /**
+     * @throws InstallmentException
+     */
     public function handle(): void
     {
         $products = [];
@@ -74,7 +79,7 @@ class NewOrderCommand extends Command
         }
 
         if ($payment_method === PaymentMethod::CreditCard->getName()){
-            $installments = $this->ask('Em quantas prestações pretende pagar?');
+            $installments = new Installment($this->ask('Em quantas prestações pretende pagar?'));
         }
 
         $method = match ($payment_method){
