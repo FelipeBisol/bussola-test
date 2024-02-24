@@ -25,6 +25,3 @@ services:
 networks:
     sail:
         driver: bridge
-volumes:
-    sail-pgsql:
-        driver: local

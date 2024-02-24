@@ -1,14 +1,9 @@
 FROM alpine:latest
 
-ARG NOVA_USERNAME
-ENV USERNAME $NOVA_USERNAME
-
-ARG NOVA_PASSWORD
-ENV PASSWORD $NOVA_PASSWORD
-
 # Install packages and remove default server definition
 RUN apk --no-cache add \
   curl \
+  bash \
   nginx \
   php83 \
   php83-ctype \
@@ -43,7 +38,6 @@ RUN apk --no-cache add \
   php83-exif\
   php83-redis \
   supervisor\
-  libgcc\
   git
 
 # Create symlink so programs depending on `php` still function
@@ -85,11 +79,7 @@ USER nobody
 WORKDIR /var/www/html
 COPY --chown=nobody . /var/www/html/
 
-# RUN composer config http-basic.nova.laravel.com $USERNAME $PASSWORD
-
 RUN composer install
-
-# RUN php artisan horizon:publish
 
 # Expose the port nginx is reachable on
 EXPOSE 80 443
